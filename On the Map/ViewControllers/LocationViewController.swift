@@ -25,6 +25,10 @@ class LocationViewController: UIViewController {
         navBar?.tintColor = UIColor(red: 0.01, green: 0.70, blue: 0.89, alpha: 1.00)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        self.tabBarController?.tabBar.isHidden = false
+    }
+    
     @objc func logout() {
         Requests.logout { success, error in
             if success {
@@ -45,6 +49,7 @@ class LocationViewController: UIViewController {
     }
     
     @objc func addLocation() {
-        print("add")
+        let infoPostingViewController = InfoPostingViewController()
+        self.navigationController?.pushViewController(infoPostingViewController, animated: true)
     }
 }

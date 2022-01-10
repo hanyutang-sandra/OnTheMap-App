@@ -65,6 +65,6 @@ extension TabbedTableViewController: UITableViewDelegate, UITableViewDataSource 
         
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let url = ResultsModel.results[indexPath.row].mediaURL
-        UIApplication.shared.open(URL(string: url), options: [:], completionHandler: nil)
+        UIApplication.shared.open(URL(string: url)!, options: [:], completionHandler: nil)
     }
 }

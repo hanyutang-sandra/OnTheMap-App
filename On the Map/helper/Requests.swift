@@ -31,6 +31,57 @@ class Requests {
         }
     }
     
+    static func postStudentLocation(completion: @escaping (Bool, Error?) -> Void) {
+        let body = PostStudentLocation(firstName: StudentLocationModel.firstName, lastName: StudentLocationModel.lastName, latitude: StudentLocationModel.latitude, longitude: StudentLocationModel.longitude, mapString: StudentLocationModel.mapString, mediaURL: StudentLocationModel.mediaURL, uniqueKey: StudentLocationModel.uniqueKey)
+        taskForPOSTRequest(url: EndPoints.postStudentLocation.url, body: body, responseType: PostStudentLocationResponse.self, useCleanData: false) { response, error in
+            if let response = response {
+                StudentLocationModel.objectId = response.objectId
+                completion(true, nil)
+            } else {
+                completion(false, error)
+            }
+        }
+    }
+    
+    static func getStudentInfo(completion: @escaping (GetStudentInfo?, Error?) -> Void) {
+        taskForGETRequest(url: EndPoints.getStudentInfo.url, responseType: GetStudentInfo.self, useCleanData: true) { response, error in
+            if let response = response {
+                completion(response, nil)
+            } else {
+                completion(nil, error)
+            }
+        }
+    }
+    
+    static func updateStudentLocation(completion: @escaping (Bool, Error?) ->Void) {
+        let body = PostStudentLocation(firstName: StudentLocationModel.firstName, lastName: StudentLocationModel.lastName, latitude: StudentLocationModel.latitude, longitude: StudentLocationModel.longitude, mapString: StudentLocationModel.mapString, mediaURL: StudentLocationModel.mediaURL, uniqueKey: StudentLocationModel.uniqueKey)
+        var request = URLRequest(url: EndPoints.updateStudentLocation.url)
+        request.httpMethod = "PUT"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try! JSONEncoder().encode(body)
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    completion(false, error)
+                }
+                return
+            }
+            let decoder = JSONDecoder()
+            do {
+                let _ = try decoder.decode(UpdateStudentLocationResponse.self, from: data)
+                DispatchQueue.main.async {
+                    completion(true, nil)
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    completion(false, error)
+                }
+            }
+        }
+        task.resume()
+        
+    }
+    
     static func logout(completion: @escaping (Bool, Error?) -> Void) {
         var request = URLRequest(url: EndPoints.login.url)
         request.httpMethod = "DELETE"

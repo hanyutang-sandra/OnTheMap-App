@@ -13,6 +13,12 @@
 		36A8E9B2278BC89700519F9C /* Results.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A8E9B1278BC89700519F9C /* Results.swift */; };
 		36A8E9B4278BD6DE00519F9C /* ResultsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A8E9B3278BD6DE00519F9C /* ResultsModel.swift */; };
 		36A8E9B6278BDB0800519F9C /* TabbedTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A8E9B5278BDB0800519F9C /* TabbedTableViewController.swift */; };
+		36A8E9B8278BF07E00519F9C /* PinLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A8E9B7278BF07E00519F9C /* PinLocationViewController.swift */; };
+		36A8E9BA278BF15900519F9C /* PostStudentLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A8E9B9278BF15900519F9C /* PostStudentLocation.swift */; };
+		36A8E9BC278BF1DF00519F9C /* PostStudentLocationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A8E9BB278BF1DF00519F9C /* PostStudentLocationResponse.swift */; };
+		36A8E9BE278BF24C00519F9C /* StudentLocationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A8E9BD278BF24C00519F9C /* StudentLocationModel.swift */; };
+		36A8E9C0278BF49D00519F9C /* getStudentInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A8E9BF278BF49D00519F9C /* getStudentInfo.swift */; };
+		36A8E9C2278BFD8C00519F9C /* UpdateStudentLocationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A8E9C1278BFD8C00519F9C /* UpdateStudentLocationResponse.swift */; };
 		36B2CA922784EAB10023F763 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36B2CA912784EAB10023F763 /* AppDelegate.swift */; };
 		36B2CA942784EAB10023F763 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36B2CA932784EAB10023F763 /* SceneDelegate.swift */; };
 		36B2CA962784EAB10023F763 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36B2CA952784EAB10023F763 /* LoginViewController.swift */; };
@@ -52,6 +58,12 @@
 		36A8E9B1278BC89700519F9C /* Results.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Results.swift; sourceTree = "<group>"; };
 		36A8E9B3278BD6DE00519F9C /* ResultsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsModel.swift; sourceTree = "<group>"; };
 		36A8E9B5278BDB0800519F9C /* TabbedTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbedTableViewController.swift; sourceTree = "<group>"; };
+		36A8E9B7278BF07E00519F9C /* PinLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinLocationViewController.swift; sourceTree = "<group>"; };
+		36A8E9B9278BF15900519F9C /* PostStudentLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostStudentLocation.swift; sourceTree = "<group>"; };
+		36A8E9BB278BF1DF00519F9C /* PostStudentLocationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostStudentLocationResponse.swift; sourceTree = "<group>"; };
+		36A8E9BD278BF24C00519F9C /* StudentLocationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentLocationModel.swift; sourceTree = "<group>"; };
+		36A8E9BF278BF49D00519F9C /* getStudentInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getStudentInfo.swift; sourceTree = "<group>"; };
+		36A8E9C1278BFD8C00519F9C /* UpdateStudentLocationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateStudentLocationResponse.swift; sourceTree = "<group>"; };
 		36B2CA8E2784EAB10023F763 /* On the Map.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "On the Map.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		36B2CA912784EAB10023F763 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		36B2CA932784EAB10023F763 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -138,6 +150,7 @@
 				36B2CAD4278785150023F763 /* TabBarController.swift */,
 				36A8E9AB278BA4F100519F9C /* LocationViewController.swift */,
 				36A8E9B5278BDB0800519F9C /* TabbedTableViewController.swift */,
+				36A8E9B7278BF07E00519F9C /* PinLocationViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -151,6 +164,11 @@
 				36A8E9AF278BC7CF00519F9C /* StudentLocation.swift */,
 				36A8E9B1278BC89700519F9C /* Results.swift */,
 				36A8E9B3278BD6DE00519F9C /* ResultsModel.swift */,
+				36A8E9B9278BF15900519F9C /* PostStudentLocation.swift */,
+				36A8E9BB278BF1DF00519F9C /* PostStudentLocationResponse.swift */,
+				36A8E9BD278BF24C00519F9C /* StudentLocationModel.swift */,
+				36A8E9BF278BF49D00519F9C /* getStudentInfo.swift */,
+				36A8E9C1278BFD8C00519F9C /* UpdateStudentLocationResponse.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -298,8 +316,12 @@
 				36B2CA962784EAB10023F763 /* LoginViewController.swift in Sources */,
 				36B2CA922784EAB10023F763 /* AppDelegate.swift in Sources */,
 				36B2CAD5278785150023F763 /* TabBarController.swift in Sources */,
+				36A8E9C2278BFD8C00519F9C /* UpdateStudentLocationResponse.swift in Sources */,
+				36A8E9BC278BF1DF00519F9C /* PostStudentLocationResponse.swift in Sources */,
 				36A8E9AE278BBA4100519F9C /* LogoutResponse.swift in Sources */,
 				36A8E9B4278BD6DE00519F9C /* ResultsModel.swift in Sources */,
+				36A8E9B8278BF07E00519F9C /* PinLocationViewController.swift in Sources */,
+				36A8E9C0278BF49D00519F9C /* getStudentInfo.swift in Sources */,
 				36A8E9B0278BC7CF00519F9C /* StudentLocation.swift in Sources */,
 				36B2CACB2786B5E60023F763 /* LoginResponse.swift in Sources */,
 				36B2CAD32786BEA60023F763 /* InfoPostingViewController.swift in Sources */,
@@ -311,6 +333,8 @@
 				36B2CAC92786B1A80023F763 /* Requests.swift in Sources */,
 				36B2CACD2786B7570023F763 /* LoginRequest.swift in Sources */,
 				36B2CA942784EAB10023F763 /* SceneDelegate.swift in Sources */,
+				36A8E9BE278BF24C00519F9C /* StudentLocationModel.swift in Sources */,
+				36A8E9BA278BF15900519F9C /* PostStudentLocation.swift in Sources */,
 				36B2CACF2786BBFC0023F763 /* Auth.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
