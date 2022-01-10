@@ -93,16 +93,18 @@ extension LoginViewController {
     @objc func handleLoginTapped() {
         Requests.login(email: emailTextField.text ?? "", password: passwordTextField.text ?? "") { success, error in
             if success {
-                print("success")
+                let tabBarController = TabBarController()
+                tabBarController.modalPresentationStyle = .fullScreen
+                tabBarController.modalTransitionStyle = .flipHorizontal
+                self.show(tabBarController, sender: nil)
             } else {
-                self.showAlert(title: "Something is wrong", message: "Something is wrong. Plz try again")
+                self.showAlert(title: "Something is wrong", message: error?.localizedDescription ?? "")
             }
         }
     }
     
     @objc func handleSignupTapped() {
-        let udaUrl = URL(string: "https://auth.udacity.com/sign-up?next=https://classroom.udacity.com")
-        UIApplication.shared.open(udaUrl!, options: [:], completionHandler: nil)
+        UIApplication.shared.open(EndPoints.websiteLogin.url, options: [:], completionHandler: nil)
     }
 }
 
