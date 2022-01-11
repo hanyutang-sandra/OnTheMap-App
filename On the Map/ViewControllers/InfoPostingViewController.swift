@@ -18,6 +18,8 @@ class InfoPostingViewController: UIViewController {
     private let mediaURLTextField = UITextField()
     private let findLocationButton = UIButton(type: .roundedRect)
     
+    private let activityIndicator = UIActivityIndicatorView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tabBarController?.tabBar.isHidden = true
@@ -27,7 +29,8 @@ class InfoPostingViewController: UIViewController {
         view.backgroundColor = .white
         view.addSubview(logoImageView)
         view.addSubview(infoPostingStackView)
-        
+        view.addSubview(activityIndicator)
+        handleLoading(isLoading: false)
         installConstraints()
     }
     
@@ -74,11 +77,14 @@ class InfoPostingViewController: UIViewController {
         findLocationButton.backgroundColor = UdaColor
         findLocationButton.layer.cornerRadius = 5
         findLocationButton.addTarget(self, action: #selector(handleFindLocationTapped), for: .touchUpInside)
+        
+        activityIndicator.hidesWhenStopped = true
     }
 }
 
 extension InfoPostingViewController {
     @objc func handleFindLocationTapped() {
+        handleLoading(isLoading: true)
         StudentLocationModel.mediaURL = self.mediaURLTextField.text ?? ""
         let geoCoder = CLGeocoder()
         geoCoder.geocodeAddressString(self.locationTextField.text ?? "") { placemark, error in
@@ -103,6 +109,7 @@ extension InfoPostingViewController {
                     let pinLocationViewController = PinLocationViewController()
                     self.navigationController?.pushViewController(pinLocationViewController, animated: true)
                 } else {
+                    self.handleLoading(isLoading: false)
                     print(error?.localizedDescription)
                 }
             }
@@ -111,5 +118,16 @@ extension InfoPostingViewController {
     
     @objc func handleGoBack(){
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    func handleLoading(isLoading: Bool) {
+        if isLoading {
+            activityIndicator.startAnimating()
+        } else {
+            activityIndicator.stopAnimating()
+        }
+        locationTextField.isEnabled = !isLoading
+        mediaURLTextField.isEnabled = !isLoading
+        findLocationButton.isEnabled = !isLoading
     }
 }

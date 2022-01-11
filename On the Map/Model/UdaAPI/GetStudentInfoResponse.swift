@@ -1,5 +1,5 @@
 //
-//  getStudentInfoResponse.swift
+//  GetStudentInfoResponse.swift
 //  On the Map
 //
 //  Created by Hanyu Tang on 1/9/22.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct GetStudentInfo: Codable {
+struct GetStudentInfoResponse: Codable {
     let firstName: String
     let lastName: String
     let key: String

@@ -12,6 +12,7 @@ import MapKit
 class PinLocationViewController: UIViewController {
     private let mapView = MKMapView()
     private let updateLocationButton = UIButton(type: .roundedRect)
+    private let activityIndicator = UIActivityIndicatorView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,8 +22,10 @@ class PinLocationViewController: UIViewController {
         
         view.addSubview(mapView)
         view.addSubview(updateLocationButton)
+        view.addSubview(activityIndicator)
         installConstraints()
         handleMapPinProcessing()
+        handleLoading(isLoading: false)
     }
     
     func installConstraints() {
@@ -40,7 +43,9 @@ class PinLocationViewController: UIViewController {
             updateLocationButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             updateLocationButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -40),
             updateLocationButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -100),
-            updateLocationButton.heightAnchor.constraint(equalToConstant: 50)
+            updateLocationButton.heightAnchor.constraint(equalToConstant: 50),
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
     
@@ -50,9 +55,12 @@ class PinLocationViewController: UIViewController {
         updateLocationButton.backgroundColor = UdaColor
         updateLocationButton.layer.cornerRadius = 5
         updateLocationButton.addTarget(self, action: #selector(handleFinishTapped), for: .touchUpInside)
+        
+        activityIndicator.hidesWhenStopped = true
     }
     
     @objc func handleFinishTapped() {
+        handleLoading(isLoading: true)
         Requests.updateStudentLocation { success, error in
             if success {
                 let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
@@ -61,6 +69,15 @@ class PinLocationViewController: UIViewController {
                 print(error?.localizedDescription)
             }
         }
+    }
+    
+    func handleLoading(isLoading: Bool) {
+        if isLoading {
+            activityIndicator.startAnimating()
+        } else {
+            activityIndicator.stopAnimating()
+        }
+        updateLocationButton.isEnabled = !isLoading
     }
 }
 

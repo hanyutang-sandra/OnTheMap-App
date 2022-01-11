@@ -20,19 +20,23 @@ class LoginViewController: UIViewController {
     private let signupLabel = UILabel()
     private let signupLink = UIButton(type: .system)
     
+    private let activityIndicator = UIActivityIndicatorView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         view.addSubview(logoImageView)
         view.addSubview(loginStackView)
         view.addSubview(signupStackView)
+        view.addSubview(activityIndicator)
+        handleLoading(isLoading: false)
         installConstraints()
     }
     
     func installConstraints() {
         configure()
         
-        let views = [logoImageView, loginStackView, signupStackView]
+        let views = [logoImageView, loginStackView, signupStackView, activityIndicator]
         var layoutConstraints:[NSLayoutConstraint] = []
         
         for _view in views {
@@ -50,7 +54,8 @@ class LoginViewController: UIViewController {
             logoImageView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: -200),
             loginStackView.centerYAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 100),
             loginStackView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -100),
-            signupStackView.centerYAnchor.constraint(equalTo: loginStackView.bottomAnchor, constant: 40)
+            signupStackView.centerYAnchor.constraint(equalTo: loginStackView.bottomAnchor, constant: 40),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
         ] + layoutConstraints)
     }
     
@@ -86,11 +91,14 @@ class LoginViewController: UIViewController {
         
         signupStackView.spacing = 5
         
+        activityIndicator.hidesWhenStopped = true
+        
     }
 }
 
 extension LoginViewController {
     @objc func handleLoginTapped() {
+        handleLoading(isLoading: true)
         Requests.login(email: emailTextField.text ?? "", password: passwordTextField.text ?? "") { success, error in
             if success {
                 let tabBarController = TabBarController()
@@ -98,20 +106,31 @@ extension LoginViewController {
                 tabBarController.modalTransitionStyle = .flipHorizontal
                 self.show(tabBarController, sender: nil)
             } else {
-                self.showAlert(title: "Something is wrong", message: error?.localizedDescription ?? "")
+                self.handleLoading(isLoading: false)
+                self.showAlert(title: "Oops", message: error?.localizedDescription ?? "Something is wrong. Please try again.")
             }
         }
     }
     
     @objc func handleSignupTapped() {
+        handleLoading(isLoading: true)
         UIApplication.shared.open(EndPoints.websiteLogin.url, options: [:], completionHandler: nil)
     }
-}
-
-extension LoginViewController {
+    
     func showAlert(title: String, message: String) {
         let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         show(alertVC, sender: nil)
+    }
+    
+    func handleLoading(isLoading: Bool) {
+        if isLoading {
+            activityIndicator.startAnimating()
+        } else {
+            activityIndicator.stopAnimating()
+        }
+        emailTextField.isEnabled = !isLoading
+        passwordTextField.isEnabled = !isLoading
+        loginButton.isEnabled = !isLoading
     }
 }

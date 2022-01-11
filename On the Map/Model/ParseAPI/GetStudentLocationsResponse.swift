@@ -1,11 +1,15 @@
 //
-//  StudentLocation.swift
+//  GetStudentLocationResponse.swift
 //  On the Map
 //
 //  Created by Hanyu Tang on 1/9/22.
 //
 
 import Foundation
+
+struct GetStudentLocationResponse: Codable {
+    let results: [StudentLocation]
+}
 
 struct StudentLocation: Codable {
     let createdAt: String
@@ -19,3 +23,5 @@ struct StudentLocation: Codable {
     let uniqueKey: String
     let updatedAt: String
 }
+
+

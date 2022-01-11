@@ -22,7 +22,7 @@ class Requests {
     }
     
     static func getStudentLocations(completion: @escaping ([StudentLocation]?, Error?) -> Void){
-        taskForGETRequest(url: EndPoints.getStudentLocations.url, responseType: Results.self, useCleanData: false) { response, error in
+        taskForGETRequest(url: EndPoints.getStudentLocations.url, responseType: GetStudentLocationResponse.self, useCleanData: false) { response, error in
             if let response = response {
                 completion(response.results, nil)
             } else {
@@ -32,7 +32,7 @@ class Requests {
     }
     
     static func postStudentLocation(completion: @escaping (Bool, Error?) -> Void) {
-        let body = PostStudentLocation(firstName: StudentLocationModel.firstName, lastName: StudentLocationModel.lastName, latitude: StudentLocationModel.latitude, longitude: StudentLocationModel.longitude, mapString: StudentLocationModel.mapString, mediaURL: StudentLocationModel.mediaURL, uniqueKey: StudentLocationModel.uniqueKey)
+        let body = PostStudentLocationRequest(firstName: StudentLocationModel.firstName, lastName: StudentLocationModel.lastName, latitude: StudentLocationModel.latitude, longitude: StudentLocationModel.longitude, mapString: StudentLocationModel.mapString, mediaURL: StudentLocationModel.mediaURL, uniqueKey: StudentLocationModel.uniqueKey)
         taskForPOSTRequest(url: EndPoints.postStudentLocation.url, body: body, responseType: PostStudentLocationResponse.self, useCleanData: false) { response, error in
             if let response = response {
                 StudentLocationModel.objectId = response.objectId
@@ -43,8 +43,8 @@ class Requests {
         }
     }
     
-    static func getStudentInfo(completion: @escaping (GetStudentInfo?, Error?) -> Void) {
-        taskForGETRequest(url: EndPoints.getStudentInfo.url, responseType: GetStudentInfo.self, useCleanData: true) { response, error in
+    static func getStudentInfo(completion: @escaping (GetStudentInfoResponse?, Error?) -> Void) {
+        taskForGETRequest(url: EndPoints.getStudentInfo.url, responseType: GetStudentInfoResponse.self, useCleanData: true) { response, error in
             if let response = response {
                 completion(response, nil)
             } else {
@@ -54,7 +54,7 @@ class Requests {
     }
     
     static func updateStudentLocation(completion: @escaping (Bool, Error?) ->Void) {
-        let body = PostStudentLocation(firstName: StudentLocationModel.firstName, lastName: StudentLocationModel.lastName, latitude: StudentLocationModel.latitude, longitude: StudentLocationModel.longitude, mapString: StudentLocationModel.mapString, mediaURL: StudentLocationModel.mediaURL, uniqueKey: StudentLocationModel.uniqueKey)
+        let body = PostStudentLocationRequest(firstName: StudentLocationModel.firstName, lastName: StudentLocationModel.lastName, latitude: StudentLocationModel.latitude, longitude: StudentLocationModel.longitude, mapString: StudentLocationModel.mapString, mediaURL: StudentLocationModel.mediaURL, uniqueKey: StudentLocationModel.uniqueKey)
         var request = URLRequest(url: EndPoints.updateStudentLocation.url)
         request.httpMethod = "PUT"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -105,6 +105,8 @@ class Requests {
             do {
                 let _ = try decoder.decode(LogoutResponse.self, from: cleanData)
                 DispatchQueue.main.async {
+                    Auth.accountId = ""
+                    Auth.sessionId = ""
                     completion(true, nil)
                 }
             } catch {
@@ -117,6 +119,7 @@ class Requests {
     }
 }
 
+// MARK: Reusable helpers
 extension Requests {
     static func taskForGETRequest<ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, useCleanData: Bool, completion: @escaping (ResponseType?, Error?) -> Void) {
         let request = URLRequest(url: url)
@@ -181,6 +184,7 @@ extension Requests {
         task.resume()
     }
     
+    // For all Udacity API the first 5 characters are for security purpose and need to be skipped
     static func skippingSecurityCoding(data: Data) -> Data {
         let newData = data.subdata(in: 5..<data.count)
         return newData
