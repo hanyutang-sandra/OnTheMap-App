@@ -26,6 +26,8 @@ class PinLocationViewController: UIViewController {
         installConstraints()
         handleMapPinProcessing()
         handleLoading(isLoading: false)
+        
+        mapView.delegate = self
     }
     
     func installConstraints() {
@@ -65,8 +67,6 @@ class PinLocationViewController: UIViewController {
             if success {
                 let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
                 self.navigationController!.popToViewController(viewControllers[viewControllers.count - 3], animated: true)
-            } else {
-                print(error?.localizedDescription)
             }
         }
     }

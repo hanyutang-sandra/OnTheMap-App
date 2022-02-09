@@ -17,14 +17,12 @@ class MapViewController: LocationViewController {
         view.addSubview(mapView)
         installConstraints()
         
-        Requests.getStudentLocations { results, error in
-            guard let results = results else {
-                print(error ?? "")
-                return
-            }
-            ResultsModel.results = results
-            self.handleMapPinProcessing()
-        }
+        mapView.delegate = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.handleMapPinProcessing()
     }
     
     func installConstraints() {
@@ -43,6 +41,7 @@ class MapViewController: LocationViewController {
 
 extension MapViewController: MKMapViewDelegate {
     func handleMapPinProcessing() {
+        self.mapView.removeAnnotations(mapView.annotations)
         let locations = ResultsModel.results
         var annotations = [MKPointAnnotation]()
         for location in locations {

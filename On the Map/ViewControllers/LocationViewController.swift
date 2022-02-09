@@ -27,6 +27,15 @@ class LocationViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = false
+        
+        Requests.getStudentLocations { locationResults, error in
+            guard let locationResults = locationResults else {
+                return
+            }
+            ResultsModel.results = locationResults
+            let mapViewController = MapViewController()
+            mapViewController.handleMapPinProcessing()
+        }
     }
     
     @objc func logout() {
@@ -42,6 +51,7 @@ class LocationViewController: UIViewController {
     @objc func refresh() {
         Requests.getStudentLocations { results, error in
             guard let results = results else {
+                self.showAlert(title: "Oops", message: AppError.locationDownloadError.errorDescription ?? AppError.unknowError.errorDescription ?? "")
                 return
             }
             ResultsModel.results = results
@@ -51,5 +61,11 @@ class LocationViewController: UIViewController {
     @objc func addLocation() {
         let infoPostingViewController = InfoPostingViewController()
         self.navigationController?.pushViewController(infoPostingViewController, animated: true)
+    }
+    
+    func showAlert(title: String, message: String) {
+        let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        show(alertVC, sender: nil)
     }
 }

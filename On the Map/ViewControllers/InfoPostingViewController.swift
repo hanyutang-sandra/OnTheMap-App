@@ -89,6 +89,7 @@ extension InfoPostingViewController {
         let geoCoder = CLGeocoder()
         geoCoder.geocodeAddressString(self.locationTextField.text ?? "") { placemark, error in
             guard let placemark = placemark else {
+                self.showAlert(title: "Oops", message: AppError.geoCodingError.errorDescription ?? AppError.unknowError.errorDescription ?? "")
                 return
             }
             StudentLocationModel.mapString = placemark[0].name ?? ""
@@ -110,7 +111,6 @@ extension InfoPostingViewController {
                     self.navigationController?.pushViewController(pinLocationViewController, animated: true)
                 } else {
                     self.handleLoading(isLoading: false)
-                    print(error?.localizedDescription)
                 }
             }
         }
@@ -129,5 +129,11 @@ extension InfoPostingViewController {
         locationTextField.isEnabled = !isLoading
         mediaURLTextField.isEnabled = !isLoading
         findLocationButton.isEnabled = !isLoading
+    }
+    
+    func showAlert(title: String, message: String) {
+        let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        show(alertVC, sender: nil)
     }
 }

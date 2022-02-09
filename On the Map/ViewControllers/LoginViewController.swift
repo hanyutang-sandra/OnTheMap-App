@@ -105,9 +105,10 @@ extension LoginViewController {
                 tabBarController.modalPresentationStyle = .fullScreen
                 tabBarController.modalTransitionStyle = .flipHorizontal
                 self.show(tabBarController, sender: nil)
+                self.handleLoading(isLoading: false)
             } else {
                 self.handleLoading(isLoading: false)
-                self.showAlert(title: "Oops", message: error?.localizedDescription ?? "Something is wrong. Please try again.")
+                self.showAlert(title: "Oops", message: error?.errorDescription ?? AppError.unknowError.errorDescription ?? "")
             }
         }
     }

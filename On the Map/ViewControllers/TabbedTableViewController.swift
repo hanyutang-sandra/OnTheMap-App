@@ -21,13 +21,6 @@ class TabbedTableViewController: LocationViewController {
         tabbedTableView.delegate = self
         tabbedTableView.dataSource = self
         tabbedTableView.register(UITableViewCell.self, forCellReuseIdentifier: "locationDataCell")
-        
-        Requests.getStudentLocations { locationResults, error in
-            guard let locationResults = locationResults else {
-                return
-            }
-            ResultsModel.results = locationResults
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
