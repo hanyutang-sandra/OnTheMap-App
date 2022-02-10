@@ -96,6 +96,7 @@ class LoginViewController: UIViewController {
     }
 }
 
+// MARK: Tapping Handlers
 extension LoginViewController {
     @objc func handleLoginTapped() {
         handleLoading(isLoading: true)
@@ -116,8 +117,11 @@ extension LoginViewController {
     @objc func handleSignupTapped() {
         handleLoading(isLoading: true)
         UIApplication.shared.open(EndPoints.websiteLogin.url, options: [:], completionHandler: nil)
-    }
-    
+    } 
+}
+
+// MARK: Alert & ActivityIndicator
+extension LoginViewController {
     func showAlert(title: String, message: String) {
         let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))

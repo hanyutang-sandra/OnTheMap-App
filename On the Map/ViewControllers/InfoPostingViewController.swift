@@ -37,7 +37,7 @@ class InfoPostingViewController: UIViewController {
     func installConstraints() {
         configure()
         
-        let views = [logoImageView, infoPostingStackView]
+        let views = [logoImageView, infoPostingStackView, activityIndicator]
         var layoutConstraints:[NSLayoutConstraint] = []
         
         for _view in views {
@@ -54,7 +54,8 @@ class InfoPostingViewController: UIViewController {
         NSLayoutConstraint.activate([
             logoImageView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: -200),
             infoPostingStackView.centerYAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 100),
-            infoPostingStackView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -100)
+            infoPostingStackView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -100),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
         ] + layoutConstraints)
     }
     
@@ -82,6 +83,7 @@ class InfoPostingViewController: UIViewController {
     }
 }
 
+// MARK: Tap Handlers
 extension InfoPostingViewController {
     @objc func handleFindLocationTapped() {
         handleLoading(isLoading: true)
@@ -89,16 +91,27 @@ extension InfoPostingViewController {
         let geoCoder = CLGeocoder()
         geoCoder.geocodeAddressString(self.locationTextField.text ?? "") { placemark, error in
             guard let placemark = placemark else {
+                self.handleLoading(isLoading: false)
                 self.showAlert(title: "Oops", message: AppError.geoCodingError.errorDescription ?? AppError.unknowError.errorDescription ?? "")
                 return
             }
             StudentLocationModel.mapString = placemark[0].name ?? ""
             StudentLocationModel.longitude = placemark[0].location?.coordinate.longitude ?? 0.0
             StudentLocationModel.latitude = placemark[0].location?.coordinate.latitude ?? 0.0
+            
+            self.updateStudentLocation()
         }
-        
+    }
+    
+    @objc func handleGoBack(){
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    private func updateStudentLocation() {
         Requests.getStudentInfo { studentInfo, error in
             guard let studentInfo = studentInfo else {
+                self.handleLoading(isLoading: false)
+                self.showAlert(title: "Oops", message: AppError.unknowError.errorDescription ?? "")
                 return
             }
             StudentLocationModel.firstName = studentInfo.firstName
@@ -107,17 +120,24 @@ extension InfoPostingViewController {
             
             Requests.postStudentLocation { success, error in
                 if success {
+                    self.handleLoading(isLoading: false)
                     let pinLocationViewController = PinLocationViewController()
                     self.navigationController?.pushViewController(pinLocationViewController, animated: true)
                 } else {
                     self.handleLoading(isLoading: false)
+                    self.showAlert(title: "Oops", message: AppError.unknowError.errorDescription ?? "")
                 }
             }
         }
     }
-    
-    @objc func handleGoBack(){
-        self.navigationController?.popViewController(animated: true)
+}
+
+// MARK: Alert & ActivityIndicator
+extension InfoPostingViewController {
+    func showAlert(title: String, message: String) {
+        let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alertVC, animated: true, completion: nil)
     }
     
     func handleLoading(isLoading: Bool) {
@@ -129,11 +149,5 @@ extension InfoPostingViewController {
         locationTextField.isEnabled = !isLoading
         mediaURLTextField.isEnabled = !isLoading
         findLocationButton.isEnabled = !isLoading
-    }
-    
-    func showAlert(title: String, message: String) {
-        let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        show(alertVC, sender: nil)
     }
 }

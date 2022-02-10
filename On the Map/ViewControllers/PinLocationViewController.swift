@@ -60,27 +60,9 @@ class PinLocationViewController: UIViewController {
         
         activityIndicator.hidesWhenStopped = true
     }
-    
-    @objc func handleFinishTapped() {
-        handleLoading(isLoading: true)
-        Requests.updateStudentLocation { success, error in
-            if success {
-                let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
-                self.navigationController!.popToViewController(viewControllers[viewControllers.count - 3], animated: true)
-            }
-        }
-    }
-    
-    func handleLoading(isLoading: Bool) {
-        if isLoading {
-            activityIndicator.startAnimating()
-        } else {
-            activityIndicator.stopAnimating()
-        }
-        updateLocationButton.isEnabled = !isLoading
-    }
 }
 
+// MARK: MKMap View
 extension PinLocationViewController: MKMapViewDelegate {
     func handleMapPinProcessing() {
         let studentLocation = StudentLocationModel.self
@@ -102,6 +84,7 @@ extension PinLocationViewController: MKMapViewDelegate {
         annotations.append(annotation)
         
         self.mapView.addAnnotations(annotations)
+        self.mapView.setRegion(MKCoordinateRegion(center: coordinate, span: MKCoordinateSpan()), animated: true)
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -125,10 +108,32 @@ extension PinLocationViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if control == view.rightCalloutAccessoryView {
-            if let url = view.annotation?.subtitle! {
-                UIApplication.shared.open(URL(string: url)!, options: [:], completionHandler: nil)
+            if let subtitleContent = view.annotation?.subtitle ?? nil, let url = URL(string: subtitleContent) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
         }
+    }
+}
+
+// MARK: Tap handlers
+extension PinLocationViewController {
+    @objc func handleFinishTapped() {
+        handleLoading(isLoading: true)
+        Requests.updateStudentLocation { success, error in
+            if success {
+                let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
+                self.navigationController!.popToViewController(viewControllers[viewControllers.count - 3], animated: true)
+            }
+        }
+    }
+    
+    func handleLoading(isLoading: Bool) {
+        if isLoading {
+            activityIndicator.startAnimating()
+        } else {
+            activityIndicator.stopAnimating()
+        }
+        updateLocationButton.isEnabled = !isLoading
     }
 }
 

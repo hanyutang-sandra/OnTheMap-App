@@ -1,5 +1,5 @@
 //
-//  MapViewController.swift
+//  LocationMapViewController.swift
 //  On the Map
 //
 //  Created by Hanyu Tang on 1/5/22.
@@ -8,13 +8,15 @@
 import Foundation
 import MapKit
 
-class MapViewController: LocationViewController {
+class LocationMapViewController: NavBarController {
     private let mapView = MKMapView()
+    private let activityIndicator = UIActivityIndicatorView()
     
     override func viewDidLoad(){
         super.viewDidLoad()
         
         view.addSubview(mapView)
+        view.addSubview(activityIndicator)
         installConstraints()
         
         mapView.delegate = self
@@ -23,10 +25,14 @@ class MapViewController: LocationViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.handleMapPinProcessing()
+        self.loadData()
     }
     
     func installConstraints() {
         mapView.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        
+        activityIndicator.hidesWhenStopped = true
         
         NSLayoutConstraint.activate([
             mapView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -34,12 +40,30 @@ class MapViewController: LocationViewController {
             mapView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
         ])
+    }
+    
+    private func loadData() {
+        self.handleLoading(isLoading: true)
+        Requests.getStudentLocations { locationResults, error in
+            guard let locationResults = locationResults else {
+                self.handleLoading(isLoading: false)
+                self.showAlert(title: "Oops! Something is wrong", message: "Failed to load location pins")
+                return
+            }
+            ResultsModel.results = locationResults
+            self.handleMapPinProcessing()
+            self.handleLoading(isLoading: false)
+        }
     }
 }
 
-extension MapViewController: MKMapViewDelegate {
+// MARK: MKMapView
+extension LocationMapViewController: MKMapViewDelegate {
     func handleMapPinProcessing() {
         self.mapView.removeAnnotations(mapView.annotations)
         let locations = ResultsModel.results
@@ -86,10 +110,30 @@ extension MapViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if control == view.rightCalloutAccessoryView {
-            if let url = view.annotation?.subtitle! {
-                UIApplication.shared.open(URL(string: url)!, options: [:], completionHandler: nil)
+            if let subtitleContent = view.annotation?.subtitle ?? nil, let url = URL(string: subtitleContent) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                self.showAlert(title: "Cannot open media link", message: "Open media link failed")
             }
         }
     }
 }
+
+// MARK: Alert & ActivityIndicator
+extension LocationMapViewController {
+    func showAlert(title: String, message: String) {
+        let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alertVC, animated: true, completion: nil)
+    }
+    
+    func handleLoading(isLoading: Bool) {
+        if isLoading {
+            activityIndicator.startAnimating()
+        } else {
+            activityIndicator.stopAnimating()
+        }
+    }
+}
+
 

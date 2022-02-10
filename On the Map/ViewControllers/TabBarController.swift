@@ -9,10 +9,10 @@ import Foundation
 import UIKit
 
 class TabBarController: UITabBarController, UITabBarControllerDelegate {
-    private let mapViewController = UINavigationController(rootViewController: MapViewController())
-    private let mapViewControllerIcon = UITabBarItem(title: "Map View", image: UIImage(named: "icon_mapview-deselected"), tag: 0)
-    private let tabbedTableViewController = UINavigationController(rootViewController: TabbedTableViewController())
-    private let tabbedTableViewControllerIcon = UITabBarItem(title: "Table View", image: UIImage(named: "icon_listview-deselected"), tag: 1)
+    private let locationMapViewController = UINavigationController(rootViewController: LocationMapViewController())
+    private let locationMapViewControllerIcon = UITabBarItem(title: "Map View", image: UIImage(named: "icon_mapview-deselected"), tag: 0)
+    private let locationTabbedTableViewController = UINavigationController(rootViewController: LocationTabbedTableViewController())
+    private let locationTabbedTableViewControllerIcon = UITabBarItem(title: "Table View", image: UIImage(named: "icon_listview-deselected"), tag: 1)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,10 +27,10 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     }
     
     func setUpViewControllerItems() -> [UIViewController] {
-        mapViewControllerIcon.selectedImage = UIImage(named: "icon_mapview-selected")
-        mapViewController.tabBarItem = mapViewControllerIcon
-        tabbedTableViewControllerIcon.selectedImage = UIImage(named: "icon_listview-selected")
-        tabbedTableViewController.tabBarItem = tabbedTableViewControllerIcon
-        return [mapViewController, tabbedTableViewController]
+        locationMapViewControllerIcon.selectedImage = UIImage(named: "icon_mapview-selected")
+        locationMapViewController.tabBarItem = locationMapViewControllerIcon
+        locationTabbedTableViewControllerIcon.selectedImage = UIImage(named: "icon_listview-selected")
+        locationTabbedTableViewController.tabBarItem = locationTabbedTableViewControllerIcon
+        return [locationMapViewController, locationTabbedTableViewController]
     }
 }
