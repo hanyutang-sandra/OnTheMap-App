@@ -33,12 +33,8 @@ class NavBarController: UIViewController {
 // MARK: Tap Handlers
 extension NavBarController {
     @objc func logout() {
-        Requests.logout { success, error in
-            if success {
-                self.dismiss(animated: true, completion: nil)
-            } else {
-                self.dismiss(animated: true, completion: nil)
-            }
+        Requests.logout { _, _ in
+            self.dismiss(animated: true, completion: nil)
         }
     }
     

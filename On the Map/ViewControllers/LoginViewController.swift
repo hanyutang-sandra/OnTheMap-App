@@ -109,7 +109,7 @@ extension LoginViewController {
                 self.handleLoading(isLoading: false)
             } else {
                 self.handleLoading(isLoading: false)
-                self.showAlert(title: "Oops", message: error?.errorDescription ?? AppError.unknowError.errorDescription ?? "")
+                self.showAlert(title: "Oops! Something is wrong", message: error?.errorDescription ?? AppError.unknowError.errorDescription ?? "")
             }
         }
     }

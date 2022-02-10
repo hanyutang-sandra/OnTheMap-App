@@ -33,6 +33,7 @@ class PinLocationViewController: UIViewController {
     func installConstraints() {
         mapView.translatesAutoresizingMaskIntoConstraints = false
         updateLocationButton.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         configure()
         
         NSLayoutConstraint.activate([
@@ -115,16 +116,30 @@ extension PinLocationViewController: MKMapViewDelegate {
     }
 }
 
-// MARK: Tap handlers
+// MARK: Tap handler
 extension PinLocationViewController {
     @objc func handleFinishTapped() {
         handleLoading(isLoading: true)
         Requests.updateStudentLocation { success, error in
             if success {
+                self.handleLoading(isLoading: false)
                 let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
                 self.navigationController!.popToViewController(viewControllers[viewControllers.count - 3], animated: true)
+            } else {
+                self.handleLoading(isLoading: false)
+                self.showAlert(title: "Oops! Something is wrong", message: error?.errorDescription ?? AppError.unknowError.errorDescription ?? "")
+                return
             }
         }
+    }
+}
+
+// MARK: Alert & ActivityIndicator
+extension PinLocationViewController {
+    func showAlert(title: String, message: String) {
+        let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alertVC, animated: true, completion: nil)
     }
     
     func handleLoading(isLoading: Bool) {

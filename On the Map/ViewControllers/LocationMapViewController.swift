@@ -52,7 +52,7 @@ class LocationMapViewController: NavBarController {
         Requests.getStudentLocations { locationResults, error in
             guard let locationResults = locationResults else {
                 self.handleLoading(isLoading: false)
-                self.showAlert(title: "Oops! Something is wrong", message: "Failed to load location pins")
+                self.showAlert(title: "Oops! Something is wrong", message: error?.errorDescription ?? AppError.unknowError.errorDescription ?? "")
                 return
             }
             ResultsModel.results = locationResults
@@ -112,8 +112,6 @@ extension LocationMapViewController: MKMapViewDelegate {
         if control == view.rightCalloutAccessoryView {
             if let subtitleContent = view.annotation?.subtitle ?? nil, let url = URL(string: subtitleContent) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            } else {
-                self.showAlert(title: "Cannot open media link", message: "Open media link failed")
             }
         }
     }

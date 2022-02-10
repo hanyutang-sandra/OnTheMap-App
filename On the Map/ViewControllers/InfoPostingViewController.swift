@@ -92,7 +92,7 @@ extension InfoPostingViewController {
         geoCoder.geocodeAddressString(self.locationTextField.text ?? "") { placemark, error in
             guard let placemark = placemark else {
                 self.handleLoading(isLoading: false)
-                self.showAlert(title: "Oops", message: AppError.geoCodingError.errorDescription ?? AppError.unknowError.errorDescription ?? "")
+                self.showAlert(title: "Oops! Something is wrong", message: AppError.geoCodingError.errorDescription ?? AppError.unknowError.errorDescription ?? "")
                 return
             }
             StudentLocationModel.mapString = placemark[0].name ?? ""
@@ -111,7 +111,7 @@ extension InfoPostingViewController {
         Requests.getStudentInfo { studentInfo, error in
             guard let studentInfo = studentInfo else {
                 self.handleLoading(isLoading: false)
-                self.showAlert(title: "Oops", message: AppError.unknowError.errorDescription ?? "")
+                self.showAlert(title: "Oops! Something is wrong", message: error?.errorDescription ?? AppError.unknowError.errorDescription ?? "")
                 return
             }
             StudentLocationModel.firstName = studentInfo.firstName
@@ -125,7 +125,7 @@ extension InfoPostingViewController {
                     self.navigationController?.pushViewController(pinLocationViewController, animated: true)
                 } else {
                     self.handleLoading(isLoading: false)
-                    self.showAlert(title: "Oops", message: AppError.unknowError.errorDescription ?? "")
+                    self.showAlert(title: "Oops! Something is wrong", message: error?.errorDescription ?? AppError.unknowError.errorDescription ?? "")
                 }
             }
         }

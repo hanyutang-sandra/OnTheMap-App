@@ -26,7 +26,7 @@ class Requests {
             if let response = response {
                 completion(response.results, nil)
             } else {
-                completion(nil, AppError.locationDownloadError)
+                completion(nil, error)
             }
         }
     }
@@ -38,7 +38,7 @@ class Requests {
                 StudentLocationModel.objectId = response.objectId
                 completion(true, nil)
             } else {
-                completion(false, AppError.locationPostingError)
+                completion(false, error)
             }
         }
     }
@@ -48,7 +48,7 @@ class Requests {
             if let response = response {
                 completion(response, nil)
             } else {
-                completion(nil, AppError.dataParsingError)
+                completion(nil, error)
             }
         }
     }

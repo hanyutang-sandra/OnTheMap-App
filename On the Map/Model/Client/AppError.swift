@@ -12,8 +12,6 @@ enum AppError:Error {
     case dataParsingError
     case incorrectLoginCredentialsError
     case geoCodingError
-    case locationDownloadError
-    case locationPostingError
     case unknowError
 }
 
@@ -21,17 +19,13 @@ extension AppError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .networkError:
-            return NSLocalizedString("Connection failed.", comment: "")
+            return NSLocalizedString("Connection failed. Please try again later.", comment: "")
         case .dataParsingError:
-            return NSLocalizedString("Unable to parse the response.", comment: "")
+            return NSLocalizedString("Invalid response.", comment: "")
         case .incorrectLoginCredentialsError:
             return NSLocalizedString("Incorrect email or password.", comment: "")
         case .geoCodingError:
             return NSLocalizedString("Geocoding failed.", comment: "")
-        case .locationDownloadError:
-            return NSLocalizedString("Location Download failed.", comment: "")
-        case .locationPostingError:
-            return NSLocalizedString("Location posting failed.", comment: "")
         case .unknowError:
             return NSLocalizedString("Unknown error occured", comment: "")
         }
